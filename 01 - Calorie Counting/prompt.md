@@ -1,4 +1,4 @@
-# Day 1: Calorie Counting
+# Day 01: Calorie Counting
 
 ## Part One
 
