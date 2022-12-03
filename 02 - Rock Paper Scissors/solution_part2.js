@@ -5,24 +5,37 @@ var strategyGuideArr = readFileSync("./puzzle_input.txt", { encoding: "utf8" })
   .split("\n")
   .map((line) => line.split(" "));
 
-console.log(strategyGuideArr);
-
 const throws = {
   rock: 1,
   paper: 2,
   scissors: 3,
 };
 
-const inputToThrow = {
+const inputToOpponentThrow = {
   A: throws.rock,
   B: throws.paper,
   C: throws.scissors,
-  X: throws.rock,
-  Y: throws.paper,
-  Z: throws.scissors,
 };
 
-function roshambo(opponentThrow, myThrow) {
+const inputToMyThrow = {
+  A: {
+    X: throws.scissors, // lose
+    Y: throws.rock, // draw
+    Z: throws.paper, // win
+  },
+  B: {
+    X: throws.rock,
+    Y: throws.paper,
+    Z: throws.scissors,
+  },
+  C: {
+    X: throws.paper,
+    Y: throws.scissors,
+    Z: throws.rock,
+  },
+};
+
+function scoring(opponentThrow, myThrow) {
   if (opponentThrow === myThrow) {
     return myThrow + 3;
   }
@@ -39,13 +52,14 @@ function roshambo(opponentThrow, myThrow) {
 }
 
 function roshamboWinner(stratGuide) {
-  let score = 0;
+  const scores = stratGuide.map((round) => {
+    const opponentThrow = inputToOpponentThrow[round[0]];
+    const myThrow = inputToMyThrow[round[0]][round[1]];
 
-  stratGuide.forEach((round) => {
-    console.log(round);
+    return scoring(opponentThrow, myThrow);
   });
 
-  return score;
+  return scores.reduce((a, b) => a + b);
 }
 
 console.log(roshamboWinner(strategyGuideArr));
